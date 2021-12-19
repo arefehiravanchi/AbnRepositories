@@ -1,0 +1,83 @@
+ext.deps = [:]
+
+def versions = [:]
+versions.core_ktx = "1.7.0"
+versions.appcompat = "1.4.0"
+versions.material = "1.4.0"
+versions.contraint = "2.1.2"
+versions.viewmodelx = "2.4.0"
+versions.activityx = "1.4.0"
+versions.timber = "4.7.1"
+versions.coroutines = "1.5.2"
+versions.retrofit = "2.9.0"
+versions.hilt = "2.38.1"
+versions.room = "2.4.0"
+versions.navigation = "2.3.5"
+versions.paging = "3.1.0"
+versions.glide = "4.11.0"
+versions.junit = "4.13.2"
+versions.mockito = "3.8.0"
+versions.core_testing = "2.1.0"
+versions.coroutin_testing = "1.4.1"
+versions.androidtest_junit = "1.1.3"
+versions.espresso = "3.4.0"
+versions.google_truth = "1.1"
+
+versions.okhttp_logging_interceptor = "4.8.0"
+
+def deps = [:]
+
+deps.corex = "androidx.core:core-ktx:$versions.core_ktx"
+deps.appcompat = "androidx.appcompat:appcompat:$versions.appcompat"
+deps.material = "com.google.android.material:material:$versions.material"
+deps.constraintLayout = "androidx.constraintlayout:constraintlayout:$versions.contraint"
+deps.viewmodelx = "androidx.lifecycle:lifecycle-viewmodel-ktx:$versions.viewmodelx"
+deps.activityx = "androidx.activity:activity-ktx:$versions.activityx"
+deps.timber = "com.jakewharton.timber:timber:$versions.timber"
+deps.coroutines = "org.jetbrains.kotlinx:kotlinx-coroutines-android:$versions.coroutines"
+deps.paging = "androidx.paging:paging-runtime-ktx:$versions.paging"
+deps.okhttp_logging_interceptor = "com.squareup.okhttp3:logging-interceptor:$versions.okhttp_logging_interceptor"
+
+
+def retrofit = [:]
+retrofit.runtime = "com.squareup.retrofit2:retrofit:$versions.retrofit"
+retrofit.gson = "com.squareup.retrofit2:converter-gson:$versions.retrofit"
+deps.retrofit = retrofit
+
+def hilt = [:]
+hilt.runtime = "com.google.dagger:hilt-android:$versions.hilt"
+hilt.viewmodel_lifecycle = "androidx.hilt:hilt-lifecycle-viewmodel:1.0.0-alpha03"
+hilt.compiler = "com.google.dagger:hilt-compiler:$versions.hilt"
+deps.hilt = hilt
+
+def room = [:]
+room.runtime = "androidx.room:room-runtime:$versions.room"
+room.compiler = "androidx.room:room-compiler:$versions.room"
+room.ktx = "androidx.room:room-ktx:$versions.room"
+room.paging = "androidx.room:room-paging:$versions.room"
+deps.room = room
+
+def navigation = [:]
+navigation.fragmentx = "androidx.navigation:navigation-fragment-ktx:$versions.navigation"
+navigation.uix = "androidx.navigation:navigation-ui-ktx:$versions.navigation"
+deps.navigation = navigation
+
+
+def glide = [:]
+glide.glide = "com.github.bumptech.glide:glide:$versions.glide"
+glide.compiler = "com.github.bumptech.glide:compiler:$versions.glide"
+glide.okhttp = "com.github.bumptech.glide:okhttp3-integration:$versions.glide" + "@aar"
+deps.glide = glide
+
+
+def test = [:]
+test.mockito_core = "org.mockito:mockito-core:$versions.mockito"
+test.junit = "junit:junit:$versions.junit"
+test.core_testing = "androidx.arch.core:core-testing:$versions.core_testing"
+test.coroutine_test = "org.jetbrains.kotlinx:kotlinx-coroutines-test:$versions.coroutin_testing"
+test.ext_junit = "androidx.test.ext:junit:$versions.androidtest_junit"
+test.espresso = "androidx.test.espresso:espresso-core:$versions.espresso"
+test.google_truth = "com.google.truth:truth:$versions.google_truth"
+deps.test = test
+
+ext.deps = deps

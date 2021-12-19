@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">abntest</string>
+
+    <string name="is_public">Public Repo</string>
+    <string name="is_private">Private repo</string>
+
+    <string name="open_repo">Open in Browser!</string>
+    <string name="browsers">Browsers</string>
+
+</resources>
