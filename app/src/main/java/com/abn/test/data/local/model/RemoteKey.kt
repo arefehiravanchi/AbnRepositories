@@ -6,8 +6,7 @@ import com.abn.test.util.Constants
 
 @Entity(tableName = Constants.TABLE_REMOTE_KEY)
 data class RemoteKey(
-    @PrimaryKey
-    val keyName: String,
+    @PrimaryKey var repoId: Long,
     val prevKey: Int?,
     val nextKey: Int?
     )

@@ -28,7 +28,7 @@ class GitRepoRemoteMediator(
                 LoadType.REFRESH -> Constants.FIRST_PAGE_OFFSET
                 LoadType.PREPEND -> return MediatorResult.Success(endOfPaginationReached = true)
                 LoadType.APPEND -> {
-                    val remoteKeys = remoteKeyDao.getRemoteKey(Constants.KEY_ABN_REPO)
+                    val remoteKeys = getRemoteKeyForLastItem(state)
                     if (remoteKeys?.nextKey == null) {
                         return MediatorResult.Success(endOfPaginationReached = remoteKeys != null)
                     }
@@ -48,7 +48,10 @@ class GitRepoRemoteMediator(
                 val previousKey = if (page == Constants.FIRST_PAGE_OFFSET) null else page - 1
                 val nextKey = if (endOfPaginationReached) null else page + 1
                 repositoryDao.insertAll(repoList)
-                remoteKeyDao.insert(RemoteKey(Constants.KEY_ABN_REPO, previousKey, nextKey))
+                val keys = repoList.map {
+                    RemoteKey(repoId = it.id, prevKey = previousKey, nextKey = nextKey)
+                }
+                remoteKeyDao.insertAll(keys)
                 MediatorResult.Success(endOfPaginationReached = endOfPaginationReached)
             } else {
                 MediatorResult.Error((response as Result.Error).exception)
@@ -57,6 +60,13 @@ class GitRepoRemoteMediator(
         } catch (e: Exception) {
             MediatorResult.Error(e)
         }
+    }
+
+    private suspend fun getRemoteKeyForLastItem(state: PagingState<Int, GitRepo>): RemoteKey? {
+        return state.pages.lastOrNull { it.data.isNotEmpty() }?.data?.lastOrNull()
+            ?.let { repo ->
+                remoteKeyDao.getRemoteKey(repo.id)
+            }
     }
 
 }

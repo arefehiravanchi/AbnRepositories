@@ -30,7 +30,7 @@ class GitRepoListFragment : Fragment(R.layout.fragment_repo_list) {
     private val gitRepoViewModel: GitRepoViewModel by viewModels()
 
     private lateinit var repoAdapter: GitRepoAdapter
-    private val header = PagingLoadStateAdapter()
+    private val footer = PagingLoadStateAdapter()
     private lateinit var binding: FragmentRepoListBinding
 
     override fun onCreateView(
@@ -53,7 +53,7 @@ class GitRepoListFragment : Fragment(R.layout.fragment_repo_list) {
             val action = GitRepoListFragmentDirections.openRepoDetail(id)
             findNavController().navigate(action)
         }
-        binding.repoList.adapter = repoAdapter.withLoadStateHeader(header)
+        binding.repoList.adapter = repoAdapter.withLoadStateFooter(footer)
     }
 
     private fun observe() {
@@ -83,8 +83,7 @@ class GitRepoListFragment : Fragment(R.layout.fragment_repo_list) {
         binding.repoPb.isVisible = loadState.mediator?.refresh is LoadState.Loading
 
         val errorMessage = loadState.refresh as? LoadState.Error
-            ?: loadState.source.append as? LoadState.Error
-            ?: loadState.source.prepend as? LoadState.Error
+            ?: loadState.append as? LoadState.Error
         errorMessage?.let {
             Toast.makeText(requireContext(), "Error! ${it.error}", Toast.LENGTH_LONG).show()
         }

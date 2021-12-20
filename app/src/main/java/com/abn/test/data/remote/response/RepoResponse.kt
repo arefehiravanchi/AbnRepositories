@@ -19,6 +19,7 @@ data class Owner(@SerializedName("avatar_url") val avatarUrl: String)
 
 fun RepoResponse.mapToDbModel(): GitRepo {
     return GitRepo(
+        0,
         id,
         name,
         fullName,

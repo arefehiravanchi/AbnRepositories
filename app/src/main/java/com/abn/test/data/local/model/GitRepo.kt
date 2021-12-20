@@ -8,20 +8,31 @@ import com.abn.test.util.Constants
 
 @Entity(tableName = Constants.TABLE_REPOSITORY)
 data class GitRepo(
-    @PrimaryKey var id: Long,
+    @PrimaryKey(autoGenerate = true) var dbId: Int,
+    val id: Long,
     val name: String,
-    val  fullName: String,
+    val fullName: String,
     val isPrivate: Boolean,
     val description: String?,
     val visibility: String,
     val htmlUrl: String,
-    val ownerAvatar: String)
+    val ownerAvatar: String
+)
 
 
 fun GitRepo.mapToListItem(): GitRepoListItem {
-    return GitRepoListItem(id,name,ownerAvatar,visibility,isPrivate)
+    return GitRepoListItem(id, name, ownerAvatar, visibility, isPrivate)
 }
 
 fun GitRepo.mapToDetailItem(): GitRepoDetailItem {
-    return GitRepoDetailItem(id,name,fullName,description,ownerAvatar,visibility,isPrivate,htmlUrl)
+    return GitRepoDetailItem(
+        id,
+        name,
+        fullName,
+        description,
+        ownerAvatar,
+        visibility,
+        isPrivate,
+        htmlUrl
+    )
 }
