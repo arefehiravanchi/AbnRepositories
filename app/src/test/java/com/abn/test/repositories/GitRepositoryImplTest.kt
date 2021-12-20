@@ -11,14 +11,11 @@ import com.abn.test.util.Constants
 import com.abn.test.util.Result
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.runBlocking
-import okhttp3.MediaType
-import okhttp3.ResponseBody
+import okhttp3.ResponseBody.Companion.toResponseBody
 import org.junit.Assert
 import org.junit.Before
 import org.junit.Test
-import org.mockito.ArgumentMatchers
 import org.mockito.Mock
 import org.mockito.Mockito
 import org.mockito.MockitoAnnotations
@@ -70,7 +67,7 @@ class GitRepositoryImplTest {
     @Test
     fun fetchGitRepo_Error() = runBlocking {
         Mockito.`when`(apiService.getRepositories(Constants.FIRST_PAGE_OFFSET, Constants.PAGE_SIZE))
-            .thenReturn(Response.error(404, ResponseBody.create(MediaType.parse("application/json"), "Error")))
+            .thenReturn(Response.error(404,"Error".toResponseBody()))
 
         val response = gitRepository.fetchGitRepo(Constants.FIRST_PAGE_OFFSET)
         Assert.assertTrue(response is Result.Error)

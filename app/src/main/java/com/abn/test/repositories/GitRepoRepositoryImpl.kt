@@ -15,22 +15,18 @@ import javax.inject.Singleton
 
 
 @ExperimentalPagingApi
-@Singleton
 class GitRepoRepositoryImpl @Inject constructor(
     private val apiService: ApiService,
     private val repositoryDao: RepositoryDao,
     private val remoteKeyDao: RemoteKeyDao,
 ) : GitRepoRepository {
 
-    override fun getAllRepos(): Flow<PagingData<GitRepo>> {
-        return Pager(
-            config = PagingConfig(Constants.PAGE_SIZE, enablePlaceholders = true),
-            remoteMediator = GitRepoRemoteMediator(this, repositoryDao, remoteKeyDao),
-            pagingSourceFactory = {
-                repositoryDao.getAll()
-            }
-        ).flow
-    }
+    override fun getAllRepos(): Flow<PagingData<GitRepo>> = Pager(
+        config = PagingConfig(Constants.PAGE_SIZE, prefetchDistance = 2),
+        remoteMediator = GitRepoRemoteMediator(this, repositoryDao, remoteKeyDao)
+    ) {
+        repositoryDao.getAll()
+    }.flow
 
     override suspend fun getRepoById(id: Long): GitRepo = repositoryDao.getRepoById(id)
 

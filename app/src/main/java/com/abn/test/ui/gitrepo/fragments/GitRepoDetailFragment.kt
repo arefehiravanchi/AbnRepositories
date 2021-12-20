@@ -43,7 +43,7 @@ class GitRepoDetailFragment : Fragment(R.layout.fragment_repo_detail) {
     }
 
     private fun observe() {
-        gitRepoViewModel.repo.observe(viewLifecycleOwner, { repo -> initView(repo) })
+        gitRepoViewModel.singleRepo.observe(viewLifecycleOwner, { repo -> initView(repo) })
     }
 
     private fun initView(repo: GitRepoDetailItem) {

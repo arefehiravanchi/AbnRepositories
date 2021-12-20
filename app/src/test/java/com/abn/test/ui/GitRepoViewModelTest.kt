@@ -1,34 +1,23 @@
 package com.abn.test.ui
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.Observer
-import androidx.lifecycle.liveData
-import androidx.lifecycle.map
+import androidx.lifecycle.*
 import androidx.paging.*
 import com.abn.test.MainCoroutineRule
-import com.abn.test.data.local.RemoteKeyDao
-import com.abn.test.data.local.RepositoryDao
 import com.abn.test.data.local.model.GitRepo
 import com.abn.test.data.local.model.mapToDetailItem
 import com.abn.test.data.local.model.mapToListItem
-import com.abn.test.data.remote.ApiService
 import com.abn.test.data.remote.response.RepoResponse
 import com.abn.test.data.remote.response.mapToDbModel
 import com.abn.test.repositories.GitRepoRepository
-import com.abn.test.repositories.GitRepoRepositoryImpl
 import com.abn.test.ui.gitrepo.GitRepoViewModel
 import com.abn.test.ui.gitrepo.model.GitRepoDetailItem
 import com.abn.test.ui.gitrepo.model.GitRepoListItem
-import com.abn.test.util.Constants
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.*
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.test.TestCoroutineDispatcher
-import kotlinx.coroutines.test.TestCoroutineScope
 import kotlinx.coroutines.test.runBlockingTest
 import org.junit.Assert
 import org.junit.Before
@@ -41,6 +30,9 @@ import java.lang.reflect.Type
 
 @ExperimentalCoroutinesApi
 class GitRepoViewModelTest {
+
+    @get:Rule
+    var instantTaskExecutorRule = InstantTaskExecutorRule()
 
     @Mock
     lateinit var gitRepoRepository: GitRepoRepository
@@ -75,10 +67,10 @@ class GitRepoViewModelTest {
     @Test
     fun checkRepositoryValue() = runBlockingTest{
         Mockito.`when`(gitRepoRepository.getAllRepos())
-            .thenReturn(flow { PagingData.from(mockListRepo) })
+            .thenReturn(flow{ PagingData.from(mockListRepo) })
 
         val expected =  mockRepoLisItems
-        val actual = gitRepoViewModel.getRepositories().take(1).toList().first().collectDataForTest()
+        val actual = gitRepoViewModel.repoFlow.take(1).toList().first().collectDataForTest()
         Assert.assertEquals(expected,actual)
     }
 
@@ -91,7 +83,7 @@ class GitRepoViewModelTest {
         Mockito.`when`(gitRepoRepository.getRepoById(fakeItem.id))
             .thenReturn(fakeItem)
 
-        gitRepoViewModel.repo.observeForever(observer)
+        gitRepoViewModel.singleRepo.observeForever(observer)
         gitRepoViewModel.getRepoDetails(fakeItem.id)
         Mockito.verify(observer).onChanged(fakeItem.mapToDetailItem())
 
