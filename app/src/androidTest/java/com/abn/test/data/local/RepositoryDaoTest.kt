@@ -35,41 +35,31 @@ class RepositoryDaoTest {
 
     @Test
     fun insertRepoItemsTest() = runBlockingTest {
-        val sampleList = arrayListOf<GitRepo>()
-        sampleList.add(FakeRepoItem.getFakeRepoItem())
-        for (i in 0..5) {
-            val item = FakeRepoItem.getFakeRepoItem()
-            //to change primary key values
-            item.id = i.toLong()
-            sampleList.add(item)
-        }
-
-        dao.insertAll(sampleList)
+        val fakeItems = FakeRepoItem.getFakeRepoItems()
+        dao.insertAll(fakeItems)
         val response = dao.observeAll().getOrAwaitValue()
 
-        assertThat(response).contains(FakeRepoItem.getFakeRepoItem())
-        assertThat(response.size).isEqualTo(sampleList.size)
+        Assert.assertTrue(response.any { it.id == fakeItems[0].id })
+        assertThat(response.size).isEqualTo(fakeItems.size)
 
     }
 
     @Test
     fun getRepoByIdTest() = runBlockingTest {
-        val sampleItem = FakeRepoItem.getFakeRepoItem()
-        val sampleList = arrayListOf<GitRepo>()
-        sampleList.add(sampleItem)
-        dao.insertAll(sampleList)
+        val sampleItems = FakeRepoItem.getFakeRepoItems()
+        dao.insertAll(sampleItems)
 
-        val repo = dao.getRepoById(sampleItem.id)
+        val repo = dao.getRepoById(sampleItems[0].id)
         Assert.assertNotNull(repo)
-        assertThat(repo).isEqualTo(sampleItem)
+        assertThat(repo.id).isEqualTo(sampleItems[0].id)
 
     }
 
     @Test
     fun clearRepoTest() = runBlockingTest {
-        val sampleItem = FakeRepoItem.getFakeRepoItem()
+        val sampleItem = FakeRepoItem.getFakeRepoItems()
         val sampleList = arrayListOf<GitRepo>()
-        sampleList.add(sampleItem)
+        sampleList.add(sampleItem[0])
         dao.insertAll(sampleList)
         dao.clearRepos()
         val response = dao.observeAll().getOrAwaitValue()

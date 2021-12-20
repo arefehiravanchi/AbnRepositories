@@ -12,8 +12,6 @@ import com.abn.test.util.Constants
 import com.abn.test.util.Result
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
-import junit.framework.Assert.assertFalse
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.runBlocking
 import org.junit.Assert.assertTrue
 import org.junit.Before
@@ -26,10 +24,10 @@ import java.lang.reflect.Type
 import androidx.paging.RemoteMediator
 
 import androidx.paging.LoadType
+import org.junit.Assert.assertFalse
 
 
 @ExperimentalPagingApi
-@OptIn(ExperimentalCoroutinesApi::class)
 class GitRepoRemoteMediatorTest {
 
     @Mock
@@ -101,8 +99,9 @@ class GitRepoRemoteMediatorTest {
     @Test
     fun loadData_SuccessInTheNextPageLoad() = runBlocking {
         val nextPage = 2
-        Mockito.`when`(remoteKeyDao.getRemoteKey(Constants.KEY_ABN_REPO))
-            .thenReturn(RemoteKey(Constants.KEY_ABN_REPO, null, nextPage))
+        val sampleId = 276828556L
+        Mockito.`when`(remoteKeyDao.getRemoteKey(sampleId))
+            .thenReturn(RemoteKey(sampleId, null, nextPage))
 
         Mockito.`when`(gitRepository.fetchGitRepo(nextPage))
             .thenReturn(Result.Success(data = mockedRepoList.map { it.mapToDbModel() }))
